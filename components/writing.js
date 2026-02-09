@@ -33,15 +33,6 @@ class WritingTrainingScreen {
                 </div>
                 
                 <div class="question-display" id="question-romaji"></div>
-
-                <div class="action-buttons" style="margin-top: 20px;">
-                    <button class="btn btn-warning" onclick="app.writing.showReference('hiragana')">
-                        <i class="fas fa-pen-alt"></i> Таблица хираганы
-                    </button>
-                    <button class="btn btn-warning" onclick="app.writing.showReference('katakana')">
-                        <i class="fas fa-pen-fancy"></i> Таблица катаканы
-                    </button>
-                </div>
                 
                 <div class="symbol-info" id="symbol-info"></div>
                 
