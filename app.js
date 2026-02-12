@@ -47,12 +47,18 @@ const Utils = {
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            background: ${type === "success" ? "#27ae60" : type === "error" ? "#e74c3c" : "#3498db"};
+            background: ${
+              type === "success"
+                ? "#00c853"
+                : type === "error"
+                  ? "#d50000"
+                  : "#ff8a80"
+            };
             color: white;
             border-radius: var(--border-radius);
             z-index: 10000;
             animation: alertSlideIn 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(255, 71, 133, 0.35);
             font-weight: 500;
             min-width: 250px;
             max-width: 400px;
@@ -136,7 +142,7 @@ class JapaneseTrainerApp {
                 </h1>
                 
                 <div class="menu-grid">
-                    <div class="menu-card" onclick="app.showSelectionScreen()">
+                    <div class="menu-card" onclick="app.showSelectionScreen('training')">
                         <div class="menu-icon">
                             <i class="fas fa-book-open"></i>
                         </div>
@@ -208,8 +214,8 @@ class JapaneseTrainerApp {
     this.render(content);
   }
 
-  showSelectionScreen() {
-    this.selection.show();
+  showSelectionScreen(mode = "both") {
+    this.selection.show(mode);
   }
 
   startTraining() {
@@ -240,7 +246,7 @@ class JapaneseTrainerApp {
   }
 
   startWritingTrainingFromMenu() {
-    this.showSelectionScreen();
+    this.showSelectionScreen("writing");
   }
 
   showKanjiScreen() {
@@ -479,7 +485,7 @@ class JapaneseTrainerApp {
 
   switchAlphabet(alphabet) {
     this.currentAlphabet = alphabet;
-    this.selection.show();
+    this.selection.show(this.selection.mode);
   }
 
   resetProgress() {
@@ -494,28 +500,142 @@ class JapaneseTrainerApp {
     }
   }
 
+  showSupport() {
+    const supportContent = `
+            <div style="max-height: 70vh; overflow-y: auto; padding-right: 4px;">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; font-weight: 700;">
+                    <i class="fas fa-heart"></i> Поддержать автора
+                </h3>
+                <p style="margin-bottom: 1rem; color: var(--dark-text);">
+                    Если тренажёр помогает вам в изучении японской письменности, вы можете поддержать автора небольшим донатом.
+                    Это поможет развивать проект, добавлять новые упражнения и функции.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="background: #ffe8f2; border-radius: 12px; padding: 1rem 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem;">
+                            <i class="fas fa-credit-card"></i> Банковская карта
+                        </h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.4rem;">
+                            Можно перевести на карту по номеру:
+                        </p>
+                        <div style="font-weight: 600; font-size: 0.95rem; user-select: all;">
+                            2202 2067 6841 3184
+                        </div>
+                    </div>
+
+                    <div style="background: #fff3e0; border-radius: 12px; padding: 1rem 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem;">
+                            <i class="fas fa-phone"></i> По номеру телефона
+                        </h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 0.4rem;">
+                            Можно перевести на сбербанк по номеру:
+                        </p>
+                        <div style="font-size: 0.9rem; word-break: break-all; user-select: all;">
+                            +7-923-502-16-36
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f3e5f5; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.5rem;">
+                    <h4 style="margin-bottom: 0.5rem;">
+                        <i class="fas fa-heart"></i> Спасибо за поддержку!
+                    </h4>
+                    <p style="font-size: 0.9rem; color: var(--light-text); margin: 0;">
+                    Спасибо за поддержку — даже маленький донат мотивирует продолжать развивать тренажёр.
+                </p>
+                </div>
+
+                
+            </div>
+        `;
+
+    Utils.showModal("Поддержать автора", supportContent, [
+      {
+        text: '<i class="fas fa-times"></i> Закрыть',
+        class: "btn-danger",
+        onclick: "Utils.hideModal()",
+      },
+    ]);
+  }
+
   showHelp() {
     const helpContent = `
-            <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem;">Помощь по использованию тренажера</h3>
-            
-            <div style="margin-bottom: 2rem;">
-                <h4><i class="fas fa-book"></i> Свободная тренировка</h4>
-                <p>Выберите символы хираганы или катаканы, которые хотите тренировать. Затем угадывайте их ромадзи-написание.</p>
-            </div>
-            
-            <div style="margin-bottom: 2rem;">
-                <h4><i class="fas fa-pen"></i> Тренировка письма</h4>
-                <p>Практикуйте написание символов. Пишите символы в тетради по памяти, затем сверяйтесь с правильным ответом.</p>
-            </div>
-            
-            <div style="margin-bottom: 2rem;">
-                <h4><i class="fas fa-scroll"></i> Тренировка кандзи</h4>
-                <p>Изучайте японские иероглифы (кандзи). Добавляйте кандзи с переводом и каной, затем тренируйтесь в их запоминании.</p>
-                <ul style="padding-left: 1.5rem;">
-                    <li><strong>Кандзи:</strong> Сам иероглиф (например: 日)</li>
-                    <li><strong>Перевод:</strong> Значение на русском (например: солнце, день)</li>
-                    <li><strong>Кана:</strong> Чтение хираганой/катаканой (например: ひ, にち)</li>
-                </ul>
+            <div style="max-height: 70vh; overflow-y: auto; padding-right: 4px;">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem; font-weight: 700;">
+                    <i class="fas fa-graduation-cap"></i> Как пользоваться тренажёром
+                </h3>
+                
+                <div style="margin-bottom: 1.5rem; padding: 1rem 1.2rem; border-radius: 12px; background: #ffe8f2;">
+                    <h4 style="margin-bottom: 0.6rem;">
+                        <i class="fas fa-bullseye"></i> С чего начать
+                    </h4>
+                    <ol style="padding-left: 1.3rem; margin: 0; color: var(--dark-text); font-size: 0.95rem;">
+                        <li>На главном экране выберите режим: <strong>Свободная тренировка</strong>, <strong>Тренировка письма</strong> или <strong>Тренировка кандзи</strong>.</li>
+                        <li>Выберите символы/кандзи, с которыми хотите работать.</li>
+                        <li>Нажмите кнопку запуска тренировки и следуйте подсказкам на экране.</li>
+                    </ol>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4><i class="fas fa-book"></i> Свободная тренировка (чтение)</h4>
+                    <p style="margin: 0.5rem 0;">
+                        Этот режим помогает запомнить чтение символов хираганы и катаканы.
+                    </p>
+                    <ul style="padding-left: 1.3rem; font-size: 0.95rem; color: var(--dark-text);">
+                        <li>Выберите нужные символы в списке (можно группами).</li>
+                        <li>На экране тренировки сверху показывается статистика, в центре — символ, ниже — поле для ввода ромадзи.</li>
+                        <li>Введите чтение (например: <code>ka</code>, <code>shi</code>, <code>tsu</code>) и нажмите <strong>«Проверить»</strong>.</li>
+                        <li>Тренажёр сам переключает вопросы и обновляет точность для каждого символа.</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h4><i class="fas fa-pen"></i> Тренировка письма</h4>
+                    <p style="margin: 0.5rem 0;">
+                        Здесь вы тренируете <strong>написание</strong> символов по памяти.
+                    </p>
+                    <ul style="padding-left: 1.3rem; font-size: 0.95rem; color: var(--dark-text);">
+                        <li>Тренажёр показывает ромадзи (например, <code>bu</code>), а вы пишете символ в тетради или на планшете.</li>
+                        <li>Когда готовы — нажмите <strong>«Показать ответ»</strong>, чтобы увидеть правильный знак.</li>
+                        <li>Ответьте, правильно ли вы написали символ — это обновит вашу статистику.</li>
+                        <li>Кнопки <strong>«Следующий»</strong> и <strong>«Завершить»</strong> всегда под рукой под блоком ответа.</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h4><i class="fas fa-scroll"></i> Тренировка кандзи</h4>
+                    <p style="margin: 0.5rem 0;">
+                        Этот режим помогает учить японские иероглифы, их значения и чтения.
+                    </p>
+                    <ul style="padding-left: 1.3rem; font-size: 0.95rem; color: var(--dark-text); margin-bottom: 0.5rem;">
+                        <li><strong>Кандзи</strong> — сам иероглиф (например: 日).</li>
+                        <li><strong>Перевод</strong> — значение на русском (например: солнце, день).</li>
+                        <li><strong>Кана</strong> — чтение хираганой/катаканой (например: ひ, にち).</li>
+                    </ul>
+                    <p style="margin: 0.3rem 0 0;">
+                        Добавьте нужные кандзи, затем запускайте тренировку: тренажёр будет по очереди спрашивать значение или написание.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4><i class="fas fa-keyboard"></i> Горячие клавиши</h4>
+                    <ul style="padding-left: 1.3rem; font-size: 0.95rem; color: var(--dark-text);">
+                        <li><strong>Enter</strong> — подтвердить ответ в обычной тренировке.</li>
+                        <li><strong>Enter</strong> в тренировке письма — последовательно показывает ответ и засчитывает результат.</li>
+                        <li><strong>Esc</strong> — быстро завершить текущую тренировку и показать статистику.</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 0.5rem;">
+                    <h4><i class="fas fa-lightbulb"></i> Советы по эффективному обучению</h4>
+                    <ul style="padding-left: 1.3rem; font-size: 0.95rem; color: var(--dark-text);">
+                        <li>Начинайте с небольших групп символов (5–10), постепенно расширяйте диапазон.</li>
+                        <li>Чередуйте чтение и письмо: сначала выучите чтение, затем закрепите написание.</li>
+                        <li>Возвращайтесь к «сложным» символам — тренажёр показывает их в статистике чаще.</li>
+                        <li>Лучше заниматься по 10–20 минут каждый день, чем один раз в неделю по часу.</li>
+                    </ul>
+                </div>
             </div>
         `;
 
