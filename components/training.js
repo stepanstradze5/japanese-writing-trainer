@@ -33,7 +33,7 @@ class TrainingScreen {
                 <div class="symbol-info" id="symbol-info"></div>
                 
                 <input type="text" class="answer-input" id="answer-input" 
-                       placeholder="Введите ромадзи (например ka)" 
+                       placeholder="Введите ромадзи (например: ka, shi, tsu)" 
                        autocomplete="off" autofocus>
                 
                 <div class="result-message" id="result-message"></div>
@@ -221,7 +221,7 @@ class TrainingScreen {
             <h2 class="modal-title">${title}</h2>
             <div class="modal-content">${content}</div>
             <div class="modal-actions">
-                <button class="btn btn-primary" onclick="app.showSelectionScreen(); Utils.hideModal();">
+                <button class="btn btn-primary" onclick="Utils.hideModal(); app.showSelectionScreen('training');">
                     <i class="fas fa-redo"></i> Новая тренировка
                 </button>
                 <button class="btn btn-danger" onclick="Utils.hideModal(); app.showMainMenu();">
@@ -234,41 +234,4 @@ class TrainingScreen {
     modalOverlay.style.display = "block";
   }
 
-  showWritingReference() {
-    const alphabet = app.currentAlphabet;
-    const title =
-      alphabet === "hiragana" ? "Таблица хираганы" : "Таблица катаканы";
-    const imageUrl =
-      alphabet === "hiragana"
-        ? "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Table_hiragana-ru.svg/1200px-Table_hiragana-ru.svg.png"
-        : "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Table_katakana.svg/1280px-Table_katakana.svg.png";
-
-    const content = `
-        <p style="margin-bottom: 1rem; color: var(--dark-text);">
-            Изучайте не только чтение, но и правильное написание символов. 
-            Обратите внимание на порядок черт и направление письма.
-        </p>
-        <div style="overflow-x: auto; max-height: 400px; border-radius: var(--border-radius);">
-            <img src="${imageUrl}" 
-                 alt="${title}" 
-                 style="max-width: 100%; height: auto; border-radius: var(--border-radius);"
-                 onerror="this.onerror=null; this.src='https://via.placeholder.com/800x400/cccccc/666666?text=Таблица+загружается...';">
-        </div>
-        <div style="margin-top: 1rem; text-align: center;">
-            <button class="btn btn-warning" onclick="app.showSelectionScreen(); Utils.hideModal(); app.startWritingTraining();">
-                <i class="fas fa-pen"></i> Перейти к тренировке письма
-            </button>
-        </div>
-    `;
-
-    const buttons = [
-      {
-        text: '<i class="fas fa-times"></i> Закрыть',
-        class: "btn-danger",
-        onclick: "Utils.hideModal()",
-      },
-    ];
-
-    Utils.showModal(title, content, buttons);
-  }
 }
