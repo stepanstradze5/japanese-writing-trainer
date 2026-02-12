@@ -2,9 +2,11 @@ class SelectionScreen {
   constructor(app) {
     this.app = app;
     this.selectedSymbols = new Set();
+    this.mode = "both"; // training | writing | both
   }
 
-  show() {
+  show(mode = "both") {
+    this.mode = mode;
     const alphabet = this.app.currentAlphabet;
     const isHiragana = alphabet === "hiragana";
 
@@ -34,12 +36,24 @@ class SelectionScreen {
                 <div class="symbols-grid" id="symbols-grid"></div>
                 
                 <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="app.startTraining()">
-                        <i class="fas fa-play"></i> Начать тренировку
-                    </button>
+                    ${
+                      this.mode === "writing" || this.mode === "both"
+                        ? `
                     <button class="btn btn-warning" onclick="app.startWritingTraining()">
                         <i class="fas fa-pen"></i> Начать письмо
                     </button>
+                    `
+                        : ""
+                    }
+                    ${
+                      this.mode === "training" || this.mode === "both"
+                        ? `
+                    <button class="btn btn-primary" onclick="app.startTraining()">
+                        <i class="fas fa-play"></i> Начать тренировку
+                    </button>
+                    `
+                        : ""
+                    }
                     <button class="btn btn-danger" onclick="app.showMainMenu()">
                         <i class="fas fa-arrow-left"></i> Назад
                     </button>
